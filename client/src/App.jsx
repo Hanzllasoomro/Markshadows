@@ -13,18 +13,28 @@ import NotFound from './pages/not-found';
 import ShoppingAccount from './pages/shopping-view/account';
 import ShoppingHome from './pages/shopping-view/home';
 import ShoppingCheckout from './pages/shopping-view/checkout';
+import CheckAuth from './components/common/check-auth';
 const App = () => {
   return (
     <div className="flex flex-col overflow-hidden bg-white" >
       <Routes>
         
-        <Route path="/auth" element={<AuthLayout />} >
+        <Route path="/auth" element={
+          <CheckAuth>
+            <AuthLayout />
+          </CheckAuth>
+          } >
+
           {/* Add your auth routes here */}
           <Route path="login" element={<AuthLogin />} />
           <Route path="register" element={<AuthRegister />} />
         </Route>
 
-        <Route path="/admin" element={<AdminLayout />}>
+        <Route path="/admin" element={
+          <CheckAuth>
+            <AdminLayout />
+          </CheckAuth>
+          }>
           {/* Add your admin routes here */}
           <Route path="dashboard" element={<AdminDashboard />} />
           <Route path="products" element={<AdminProducts/>} />
@@ -32,7 +42,11 @@ const App = () => {
           <Route path="features" element={<AdminFeatures/>} />
         </Route> 
 
-        <Route path="/shop" element={<ShoppingLayout />}>
+        <Route path="/shop" element={
+          <CheckAuth>
+            <ShoppingLayout />
+          </CheckAuth>
+        }>
           {/* Add your shopping routes here */}
           <Route path='account' element={<ShoppingAccount />} />
           <Route path='home' element={<ShoppingHome />} />
