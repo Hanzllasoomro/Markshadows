@@ -23,7 +23,3 @@ Frontend:
     react-router-dom
     tailwind-merge
     tailwindcss-animate
-
-mongodb:
-    Username: hanzllasoomro94
-    Password: z5CLme5e6Dm14vbt
