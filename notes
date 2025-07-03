@@ -1,0 +1,29 @@
+Backend:
+    bcryptjs
+    cloudinary
+    cookie-parser
+    cors
+    dotenv
+    express
+    jsonwebtoken
+    mongoose
+    multer
+    nodemon
+    npm
+    i
+Frontend:
+    @redixjs/toolkit
+    axios
+    class-varaiance-authority
+    clsx
+    lucide-react
+    react
+    react-dom
+    react-redux
+    react-router-dom
+    tailwind-merge
+    tailwindcss-animate
+
+mongodb:
+    Username: hanzllasoomro94
+    Password: z5CLme5e6Dm14vbt
