@@ -1,29 +1,32 @@
-import React from 'react'
+import React from 'react';
+import { Navigate, useLocation } from 'react-router-dom';
 
-export const CheckAuth = (isAuthenticated, user, childern) => {
+const CheckAuth = ({ isAuthenticated, user, children }) => {
+  const location = useLocation();
+  const path = location.pathname;
 
-    const Location = useLocation();
+  // Early redirects to avoid unnecessary re-renders
+  if (!isAuthenticated && !path.startsWith("/auth")) {
+    return <Navigate to="/auth/login" replace />;
+  }
 
-    if (!isAuthenticated && Location.pathname !== '/auth/login' && Location.pathname !== '/auth/register') {
-       return <Navigate to="/auth/login" replace />  
+  if (isAuthenticated && path.startsWith("/auth")) {
+    if (user?.role === 'admin') {
+      return <Navigate to="/admin/dashboard" replace />;
+    } else if (user?.role === 'user') {
+      return <Navigate to="/shop/home" replace />;
     }
-    if (isAuthenticated && Location.pathname === '/auth/login' || Location.pathname === '/auth/register') {
-        if(user.role === 'admin') {
-            return <Navigate to="/admin/dashboard" replace />
-        }else if(user.role === 'user') {
-            return <Navigate to="/shop/home" replace />
-        }
-    }
-    if( isAuthenticated && user?.role !== 'admin' && Location.pathname.includes('/admin')) {
-        return <Navigate to="/unauth-page" replace />
-    }
-    if( isAuthenticated && user?.role !== 'user' && Location.pathname.includes('/shop')) {
-        return <Navigate to="/admin/dashboard" replace />
-    }
-    return (
-        <div>check-auth</div>
-    )
-}
+  }
 
+  if (isAuthenticated && user?.role !== 'admin' && path.startsWith("/admin")) {
+    return <Navigate to="/unauth-page" replace />;
+  }
+
+  if (isAuthenticated && user?.role !== 'user' && path.startsWith("/shop")) {
+    return <Navigate to="/admin/dashboard" replace />;
+  }
+
+  return <>{children}</>;
+};
 
 export default CheckAuth;
