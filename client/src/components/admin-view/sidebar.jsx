@@ -26,15 +26,16 @@ const AdminSidebar = ({ open, setOpen }) => {
 
   return (
     <Fragment>
-      <Sheet open={open} onOpenChange={setOpen}>
+      <div className="md:hidden">
+        <Sheet open={open} onOpenChange={setOpen}>
         <SheetContent
           side="left"
           className="w-64 flex flex-col p-0 bg-white dark:bg-zinc-900 border-r border-border shadow-lg"
         >
-          <SheetHeader className="border-b px-4 py-3 bg-muted/40">
+          <SheetHeader className="border-b px-4 py-3 bg-muted/40 mt-5">
             <SheetTitle className="flex items-center gap-3 text-lg font-bold text-foreground">
               <ChartNoAxesCombined size={22} className="text-primary" />
-              Admin Panel
+              <span>Admin Panel</span>
             </SheetTitle>
           </SheetHeader>
 
@@ -44,6 +45,7 @@ const AdminSidebar = ({ open, setOpen }) => {
                 <li key={item.to}>
                   <NavLink
                     to={item.to}
+                    onClick={() => setOpen(false)}
                     className={({ isActive }) =>
                       `group flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${isActive
                         ? 'bg-primary text-white shadow-sm'
@@ -70,9 +72,9 @@ const AdminSidebar = ({ open, setOpen }) => {
           </div>
         </SheetContent>
       </Sheet>
-
-
-      <aside className="w-64 hidden md:flex flex-col border-r bg-background p-5 shadow-md">
+      </div>
+      
+      <aside className="w-64 hidden lg:flex flex-col border-r bg-background p-5 shadow-md">
         <div
           className="h-16 flex items-center justify-start gap-3 px-2 mb-6 cursor-pointer hover:opacity-80 transition"
           onClick={() => navigate('/admin/dashboard')}
