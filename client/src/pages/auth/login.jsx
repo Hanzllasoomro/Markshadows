@@ -1,24 +1,42 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import CommonForm from '../../components/common/form';
 import { loginFormControls } from '../../config/index';
-
+import { toast } from 'sonner';
+import { useDispatch } from 'react-redux';
+import { loginUser } from '@/store/auth-slice';
 const initialState = {
   email: '',
   password: '',
 };
 
-const onSubmit = (formData) => {
-  console.log('Login with:', formData);
-};
-
 const AuthLogin = () => {
   const [formData, setFormData] = useState(initialState);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const onSubmit = async (formData) => {
+  try {
+    const data = await dispatch(loginUser(formData));
+
+    if (data?.payload?.success) {
+      toast.success(data.payload.message);
+      if (data.payload.role === 'admin') {
+          navigate('/admin/dashboard');
+        } else {
+          navigate('/shop/home');
+        }
+    } else {
+      toast.error(data.payload?.message || 'Login failed');
+    }
+  } catch (err) {
+    toast.error('An error occurred. Please try again.');
+  }
+};
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-white flex items-center justify-center px-4 sm:px-6 lg:px-8">
       <div className="w-full max-w-md space-y-10 rounded-2xl bg-white p-8 sm:p-10 shadow-2xl ring-1 ring-gray-200 transition duration-300 ease-in-out">
-        
+
         <div className="text-center space-y-2">
           <h1 className="text-4xl font-extrabold text-gray-900 tracking-tight">
             Sign In to Your Account

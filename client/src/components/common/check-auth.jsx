@@ -1,29 +1,39 @@
 import React from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 
+const roleRedirects = {
+  admin: '/admin/dashboard',
+  user: '/shop/home',
+};
+
 const CheckAuth = ({ isAuthenticated, user, children }) => {
   const location = useLocation();
   const path = location.pathname;
+  const role = user?.role;
 
-  // Early redirects to avoid unnecessary re-renders
   if (!isAuthenticated && !path.startsWith("/auth")) {
     return <Navigate to="/auth/login" replace />;
   }
 
   if (isAuthenticated && path.startsWith("/auth")) {
-    if (user?.role === 'admin') {
-      return <Navigate to="/admin/dashboard" replace />;
-    } else if (user?.role === 'user') {
-      return <Navigate to="/shop/home" replace />;
+    if (role && roleRedirects[role]) {
+      return <Navigate to={roleRedirects[role]} replace />;
     }
-  }
-
-  if (isAuthenticated && user?.role !== 'admin' && path.startsWith("/admin")) {
     return <Navigate to="/unauth-page" replace />;
   }
 
-  if (isAuthenticated && user?.role !== 'user' && path.startsWith("/shop")) {
-    return <Navigate to="/admin/dashboard" replace />;
+  if (isAuthenticated && role !== 'admin' && path.startsWith("/admin")) {
+    if (roleRedirects[role]) {
+      return <Navigate to={roleRedirects[role]} replace />;
+    }
+    return <Navigate to="/unauth-page" replace />;
+  }
+
+  if (isAuthenticated && role !== 'user' && path.startsWith("/shop")) {
+    if (roleRedirects[role]) {
+      return <Navigate to={roleRedirects[role]} replace />;
+    }
+    return <Navigate to="/unauth-page" replace />;
   }
 
   return <>{children}</>;

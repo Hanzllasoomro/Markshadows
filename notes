@@ -23,3 +23,97 @@ Frontend:
     react-router-dom
     tailwind-merge
     tailwindcss-animate
+
+app-structure
+
+// Directory structure for a full-featured MERN Ecommerce App with Admin Panel
+
+// Root Level
+📁 ecommerce-app/
+├── 📁 client/               // React frontend
+│   ├── 📁 public/
+│   └── 📁 src/
+│       ├── 📁 app/             // Redux store config
+│       │   └── store.js
+│       ├── 📁 components/      // Reusable components
+│       │   ├── Header.jsx
+│       │   ├── Footer.jsx
+│       │   ├── ProductCard.jsx
+│       │   └── Modal.jsx
+│       ├── 📁 features/        // Redux slices
+│       │   ├── auth/
+│       │   │   └── authSlice.js
+│       │   ├── cart/
+│       │   │   └── cartSlice.js
+│       │   ├── product/
+│       │   │   └── productSlice.js
+│       │   ├── adminProduct/
+│       │   │   └── adminProductSlice.js
+│       │   ├── order/
+│       │   │   └── orderSlice.js
+│       │   └── review/
+│       │       └── reviewSlice.js
+│       ├── 📁 layouts/         // App layouts
+│       │   ├── AdminLayout.jsx
+│       │   ├── AuthLayout.jsx
+│       │   └── ShopLayout.jsx
+│       ├── 📁 pages/           // Pages/routes
+│       │   ├── admin/
+│       │   │   ├── Dashboard.jsx
+│       │   │   ├── ProductManager.jsx
+│       │   │   ├── OrderManager.jsx
+│       │   │   └── BannerManager.jsx
+│       │   ├── auth/
+│       │   │   ├── Login.jsx
+│       │   │   └── Register.jsx
+│       │   ├── shop/
+│       │   │   ├── Home.jsx
+│       │   │   ├── ProductDetail.jsx
+│       │   │   ├── Cart.jsx
+│       │   │   └── Checkout.jsx
+│       │   └── NotFound.jsx
+│       ├── 📁 utils/
+│       │   ├── axiosInstance.js
+│       │   ├── helpers.js
+│       │   └── constants.js
+│       ├── App.jsx
+│       ├── main.jsx
+│       └── index.css
+├── 📁 server/              // Express backend
+│   ├── 📁 config/           // Env, DB, cloudinary
+│   │   ├── db.js
+│   │   └── cloudinary.js
+│   ├── 📁 components/       // Reusable server-side utilities
+│   │   ├── generateToken.js      // JWT generator
+│   │   ├── uploadToCloudinary.js // Cloudinary upload logic
+│   │   └── validateEnv.js        // .env checker
+│   ├── 📁 controllers/      // Controllers
+│   │   ├── authController.js
+│   │   ├── productController.js
+│   │   ├── orderController.js
+│   │   ├── reviewController.js
+│   │   └── adminController.js
+│   ├── 📁 middleware/       // JWT auth, error handling
+│   │   ├── authMiddleware.js
+│   │   └── errorMiddleware.js
+│   ├── 📁 models/           // Mongoose schemas
+│   │   ├── User.js
+│   │   ├── Product.js
+│   │   ├── Order.js
+│   │   ├── Review.js
+│   │   └── Banner.js
+│   ├── 📁 routes/           // Route definitions
+│   │   ├── authRoutes.js
+│   │   ├── productRoutes.js
+│   │   ├── orderRoutes.js
+│   │   ├── reviewRoutes.js
+│   │   ├── adminRoutes.js
+│   │   └── uploadRoutes.js
+│   ├── 📁 uploads/          // Temp image storage
+│   └── server.js
+├── .env
+├── .gitignore
+├── package.json
+├── README.md
+
+// Deployment will use Vercel (client) and Render/Railway (server) with MongoDB Atlas
