@@ -41,7 +41,7 @@ const AdminLayout = () => {
       <AdminSidebar open={openSidebar} setOpen={setOpenSidebar} />
       <div className="flex flex-1 flex-col">
         <AdminHeader setOpen={setOpenSidebar} />
-        <main className="flex flex-1 bg-muted/40 p-4 md:p-6">
+        <main className="flex flex-col flex-1 bg-muted/40 p-4 md:p-6">
           <ErrorBoundary>
             <Suspense fallback={<div className="p-4">Loading...</div>}>
               <Outlet />
