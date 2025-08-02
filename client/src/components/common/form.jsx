@@ -4,6 +4,7 @@ import { Label } from "../ui/label";
 import { Textarea } from '../ui/textarea';
 import { Select, SelectItem, SelectTrigger, SelectValue, SelectContent } from '../../components/ui/select';
 import { Button } from '../ui/button';
+
 const CommonForm = ({ formControls, formData, setFormData, onSubmit, buttonText }) => {
 
     function renderInputsByComponentType(getControlItem) {

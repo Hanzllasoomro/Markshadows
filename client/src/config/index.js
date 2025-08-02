@@ -41,8 +41,8 @@ export const loginFormControls = [
 
 export const addProductFormElements = [
   {
-    name: 'productName',
-    label: 'Product Name',
+    name: 'title',
+    label: 'Title',
     placeholder: 'Enter product name',
     type: 'text',
     componentType: 'input',
@@ -100,6 +100,13 @@ export const addProductFormElements = [
     name: 'price',
     label: 'Price',
     placeholder: 'Enter product price',
+    type: 'number',
+    componentType: 'input',
+  },
+  {
+    name: 'salePrice',
+    label: 'Sale Price',
+    placeholder: 'Enter sale price (if applicable)',
     type: 'number',
     componentType: 'input',
   },

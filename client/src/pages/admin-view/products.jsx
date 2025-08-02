@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useState, useEffect } from "react";
 import { Button } from "../../components/ui/button";
 import {
   Sheet,
@@ -7,9 +7,13 @@ import {
   SheetTitle,
   SheetDescription
 } from "../../components/ui/sheet";
+
 import CommonForm from "@/components/common/form";
 import { addProductFormElements } from "@/config";
 import ProductImageUpload from "@/components/admin-view/image-upload";
+import { addNewProduct, fetchAllProducts } from "@/store/admin-slice/products-slice";
+import { useDispatch, useSelector } from "react-redux";
+import { toast } from "sonner";
 
 const initialFormData = {
   image: null,
@@ -24,13 +28,32 @@ const initialFormData = {
 
 export const AdminProducts = () => {
   const [openCreateProductDialog, setOpenCreateProductDialog] = useState(false);
-  const [fromData, setFromData] = useState(initialFormData);
+  const [formData, setFormData] = useState(initialFormData);
   const [imageFile, setImageFile] = useState(null);
   const [uploadedImageUrl, setUploadedImageUrl] = useState("");
-  function onSubmit() {
-    console.log("Form submitted with data: ", fromData);
-    setOpenCreateProductDialog(false);
+  const [imageLoadingState, setImageLoadingState] = useState(false);
+  const {productList} = useSelector((state) => state.adminProducts);
+
+  const dispatch = useDispatch();
+  function onSubmit(event) {
+    dispatch(addNewProduct({
+      ...formData,
+      image : uploadedImageUrl
+    })).then((data) => {
+      if (data.payload.success) {
+        dispatch(fetchAllProducts());
+        setFormData(initialFormData);
+        setImageFile(null);
+        setUploadedImageUrl("");
+        setOpenCreateProductDialog(false);
+        toast.success("Product added successfully!");
+      }
+    });
   }
+
+  useEffect(() => {
+    dispatch(fetchAllProducts());
+  }, [dispatch, imageFile, uploadedImageUrl]);
 
   return (
     <Fragment>
@@ -43,9 +66,6 @@ export const AdminProducts = () => {
         >
           Add Product
         </Button>
-      </div>
-      <div className="grid gap-4 md:grid-cols-3 lg:grid-cols-4 ">
-        Product List
       </div>
       <Sheet
         open={openCreateProductDialog}
@@ -65,14 +85,16 @@ export const AdminProducts = () => {
             setImageFile={setImageFile}
             uploadedImageUrl={uploadedImageUrl}
             setUploadedImageUrl={setUploadedImageUrl}
+            imageLoadingState = {imageLoadingState}
+            setImageLoadingState = {setImageLoadingState}
           />
           <div className="py-6">
             <CommonForm
               formControls={addProductFormElements}
-              formData={fromData}
-              setFormData={setFromData}
+              formData={formData}
+              setFormData={setFormData}
               buttonText="Add"
-              onSubmit={onSubmit}
+              onSubmit={(e) => onSubmit(e)}
             />
           </div>
         </SheetContent>

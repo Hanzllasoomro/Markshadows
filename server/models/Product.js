@@ -16,7 +16,7 @@ const productSchema = new mongoose.Schema(
       required: [true, 'Product price is required'],
       min: 0,
     },
-    stock: {
+    totalStock: {
       type: Number,
       required: [true, 'Stock count is required'],
       min: 0,
@@ -33,13 +33,10 @@ const productSchema = new mongoose.Schema(
       type: String, // Cloudinary URL
       required: [true, 'Product image is required'],
     },
-    rating: {
+    salePrice: {
       type: Number,
-      default: 0,
-    },
-    numReviews: {
-      type: Number,
-      default: 0,
+      min: 0,
+      default: 0, // Optional field for sale price
     },
   },
   {

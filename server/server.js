@@ -4,6 +4,7 @@ const cookieParser = require('cookie-parser');
 const cors = require('cors');
 const helmet = require('helmet');
 const authRoutes = require('./routes/auth/auth-routes');
+const adminProductsRouter = require("./routes/admin/products-routes");
 require('dotenv').config();
 
 if (!process.env.MONGO_URI) {
@@ -45,6 +46,7 @@ app.get('/', (req, res) => {
 });
 
 app.use('/api/auth', authRoutes);
+app.use('/api/admin/products', adminProductsRouter);
 
 app.use((err, req, res, next) => {
     console.error(err.stack);
