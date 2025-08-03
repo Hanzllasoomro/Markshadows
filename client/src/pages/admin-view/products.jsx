@@ -15,6 +15,7 @@ import {
   addNewProduct,
   fetchAllProducts,
   editProduct,
+  deleteProduct,
 } from "@/store/admin-slice/products-slice";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "sonner";
@@ -46,7 +47,7 @@ export const AdminProducts = () => {
       ? dispatch(
           editProduct({
             id: currentEditedId.toString(),
-            formData
+            formData,
           })
         ).then((data) => {
           if (data.payload.success) {
@@ -73,8 +74,26 @@ export const AdminProducts = () => {
             toast.success("Product added successfully!");
           }
         });
-  }
+  };
 
+  function isFormValid() {
+    return Object.keys(formData)
+      .map((key) => formData[key] !== "")
+      .every((item) => item);
+  };
+
+  function handleDelete(getCurrentProductId) {
+    dispatch(deleteProduct(getCurrentProductId)).then(
+      (data) => {
+        if (data.payload.success) {
+          dispatch(fetchAllProducts());
+          toast.success("Product deleted successfully!");
+        } else {
+          toast.error("Failed to delete product.");
+        }
+      }
+    );
+  };
   useEffect(() => {
     dispatch(fetchAllProducts());
   }, [dispatch, imageFile, uploadedImageUrl]);
@@ -100,6 +119,7 @@ export const AdminProducts = () => {
               setCurrentEditedId={setCurrentEditedId}
               setOpenCreateProductDialog={setOpenCreateProductDialog}
               setFormData={setFormData}
+              handleDelete={handleDelete}
             />
           ))
         ) : (
@@ -141,6 +161,7 @@ export const AdminProducts = () => {
               setFormData={setFormData}
               buttonText={currentEditedId !== null ? "Update" : "Add"}
               onSubmit={(e) => onSubmit(e)}
+              isBtnDisabled={!isFormValid() || imageLoadingState}
             />
           </div>
         </SheetContent>
