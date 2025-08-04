@@ -1,3 +1,5 @@
+import path from "path";
+
 export const registerFormControls = [
     {
         name : 'userName',
@@ -116,5 +118,38 @@ export const addProductFormElements = [
     placeholder: 'Enter total stock',
     type: 'number',
     componentType: 'input',
+  },
+];
+
+export const shoppingViewHeaderMenuItems = [
+  {
+    label: 'Home',
+    id: 'home',
+    path: '/shop/home',
+  },
+  {
+    label: 'Men',
+    id: 'men',
+    path: '/shop/listing',
+  },
+  {
+    label: 'Women',
+    id: 'women',
+    path: '/shop/listing',
+  },
+  {
+    label: 'Kids',
+    id: 'kids',
+    path: '/shop/listing',
+  },
+  {
+    label: 'Accessories',
+    id: 'accessories',
+    path: '/shop/listing',
+  },
+  {
+    label: 'Footwear',
+    id: 'footwear',
+    path: '/shop/listing',
   },
 ];
