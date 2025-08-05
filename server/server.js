@@ -5,6 +5,7 @@ const cors = require('cors');
 const helmet = require('helmet');
 const authRoutes = require('./routes/auth/auth-routes');
 const adminProductsRouter = require("./routes/admin/products-routes");
+const shopProductsRouter = require("./routes/shop/products-routes");
 require('dotenv').config();
 
 if (!process.env.MONGO_URI) {
@@ -45,20 +46,11 @@ app.get('/', (req, res) => {
     res.send('Hello, World!');
 });
 
-app.use('/api/auth', authRoutes);
-app.use('/api/admin/products', adminProductsRouter);
-
-app.use((err, req, res, next) => {
-    console.error(err.stack);
-    res.status(500).json({ error: 'Something went wrong!' });
-});
-
-process.on('SIGINT', async () => {
-    await mongoose.disconnect();
-    console.log('MongoDB disconnected. Server shutting down.');
-    process.exit(0);
-});
-
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
 });
+
+app.use('/api/auth', authRoutes);
+app.use('/api/admin/products', adminProductsRouter);
+app.use('/api/shop/products', shopProductsRouter);
+

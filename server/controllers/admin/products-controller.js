@@ -30,7 +30,7 @@ const addProduct = async (req, res) => {
 
 
         const newlyCreatedProduct = new Product({
-            image : image.result.url,
+            image: image.result.url,
             title,
             description,
             category,
@@ -76,7 +76,7 @@ const editProduct = async (req, res) => {
             totalStock,
         } = req.body;
 
-        const findProduct = await Product.findById(id);
+        let findProduct = await Product.findById(id);
         if (!findProduct) return res.status(404).json({ success: false, message: "Product not found" });
 
         findProduct.image = image || findProduct.image;
@@ -84,8 +84,8 @@ const editProduct = async (req, res) => {
         findProduct.description = description || findProduct.description;
         findProduct.category = category || findProduct.category;
         findProduct.brand = brand || findProduct.brand;
-        findProduct.price = price || findProduct.price;
-        findProduct.salePrice = salePrice || findProduct.salePrice;
+        findProduct.price = price === '' ? 0 : price || findProduct.price;
+        findProduct.salePrice = salePrice === "" ? 0 : salePrice || findProduct.salePrice;
         findProduct.totalStock = totalStock || findProduct.totalStock;
 
         await findProduct.save();
@@ -100,11 +100,9 @@ const editProduct = async (req, res) => {
 const deleteProduct = async (req, res) => {
 
     try {
-
         const { id } = req.params;
-        const findProduct = await Product.findById(id);
+        const findProduct = await Product.findByIdAndDelete(id);
         if (!findProduct) return res.status(404).json({ success: false, message: "Product not found" });
-        await findProduct.remove();
         res.status(200).json({ success: true, message: "Product deleted successfully" });
 
     } catch (error) {

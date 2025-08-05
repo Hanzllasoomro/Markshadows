@@ -153,3 +153,83 @@ export const shoppingViewHeaderMenuItems = [
     path: '/shop/listing',
   },
 ];
+
+export const categoryOptionsMap = {
+  'men' : 'Men',
+  'women' : 'Women',
+  'kids' : 'Kids',
+  'accessories' : 'Accessories',
+  'footwear' : 'Footwear',
+}
+
+export const brandOptionsMap = {
+  'nike': 'Nike',
+  'adidas': 'Adidas',
+  'puma': 'Puma',
+  'reebok': 'Reebok',
+  'underArmour': 'Under Armour',
+  'newBalance': 'New Balance',
+  'asics': 'Asics',
+  'converse': 'Converse',
+  'vans': 'Vans',
+  'fila': 'Fila',
+  'skechers': 'Skechers',
+  'brooks': 'Brooks',
+  'mizuno': 'Mizuno',
+  'hokaOneOne': 'Hoka One One',
+  'onRunning': 'On Running',
+  'salomon': 'Salomon',
+  'columbia': 'Columbia',
+  'theNorthFace': 'The North Face',
+  'patagonia': 'Patagonia',
+  'arcTeryx': "Arc'teryx",
+  'montbell': 'Montbell',
+  'mammut': 'Mammut',
+  'blackDiamond': 'Black Diamond',
+  'reiCoop': 'REI Co-op',
+};
+
+export const filterOptions = {
+  category: [
+    { id: 'men', label: 'Men' },
+    { id: 'women', label: 'Women' },
+    { id: 'kids', label: 'kids' },
+    { id: 'accesories', label: 'Accesories' },
+    { id: 'footwear', label: 'Footwear' }
+  ],
+  brand: [
+    { id: 'nike', label: 'Nike' },
+    { id: 'adidas', label: 'Adidas' },
+    { id: 'puma', label: 'Puma' },
+    { id: 'reebok', label: 'Reebok' },
+    { id: 'underArmour', label: 'Under Armour' },
+    { id: 'newBalance', label: 'New Balance' },
+    { id: 'asics', label: 'Asics' },
+    { id: 'converse', label: 'Converse' },
+    { id: 'vans', label: 'Vans' },
+    { id: 'fila', label: 'Fila' },
+    { id: 'skechers', label: 'Skechers' },
+    { id: 'brooks', label: 'Brooks' },
+    { id: 'mizuno', label: 'Mizuno' },
+    { id: 'hokaOneOne', label: 'Hoka One One' },
+    { id: 'onRunning', label: 'On Running' },
+    { id: 'salomon', label: 'Salomon' },
+    { id: 'columbia', label: 'Columbia' },
+    { id: 'theNorthFace', label: 'The North Face' },
+    { id: 'patagonia', label: 'Patagonia' },
+    { id: "arcTeryx", label: "Arc'teryx" },
+    { id: 'montbell', label: 'Montbell' },
+    { id: 'mammut', label: 'Mammut' },
+    { id: 'blackDiamond', label: 'Black Diamond' },
+    { id: 'reiCoop', label: 'REI Co-op' }
+  ],
+};
+
+export const sortOptions = [
+  { id: 'priceAsc', label: 'Price: Low to High' },
+  { id: 'priceDesc', label: 'Price: High to Low' },
+  { id: 'title-atoz', label: 'Title: A to Z' },
+  { id: 'title-ztoa', label: 'Title: Z to A' },
+  { id: 'newest', label: 'Newest Arrivals' },
+  { id: 'oldest', label: 'Oldest Arrivals' },
+];
