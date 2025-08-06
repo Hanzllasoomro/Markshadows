@@ -6,37 +6,53 @@ import {
   DropdownMenuTrigger,
 } from "../../components/ui/dropdown-menu";
 import ProductFilter from "../../components/shopping-view/filter";
-import React, { use, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ArrowUpDownIcon, FilterIcon } from "lucide-react";
 import { sortOptions } from "../../config/index";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchAllFilteredProducts } from "../../store/shop/products-slice";
 import LoadingScreen from "../../components/common/LoadingScreen";
 import ShoppingProductTile from "../../components/shopping-view/product-tile";
+import { createSearchParams, useSearchParams } from "react-router-dom";
+import ProductDetailsDialog from "../../components/shopping-view/product-details";
+import { fetchProductDetails } from "../../store/shop/products-slice/index";
+
+const createSearchParamsHelper = (filterParams) => {
+  const queryParams = [];
+  for (const [key, value] of Object.entries(filterParams)) {
+    if (Array.isArray(value) && value.length > 0) {
+      const paramValue = value.join(",");
+
+      queryParams.push(`${key}=${encodeURIComponent(paramValue)}`);
+    }
+  }
+  return queryParams.join("&");
+};
 
 const ShoppingListing = () => {
   const dispatch = useDispatch();
-  const { productList, isLoading, error } = useSelector(
+  const { productList, isLoading, error, productDetails } = useSelector(
     (state) => state.shoppingProducts
   );
 
   const [showMobileFilters, setShowMobileFilters] = useState(false);
   const [filters, setFilters] = useState({});
   const [sort, setSort] = useState(null);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [openDetailsDialog, setOpenDetailsDialog] = useState(false);
 
   const handleSort = (value) => {
     setSort(value);
-    dispatch(fetchAllFilteredProducts({ filters, sort: value }));
-  }
+  };
 
-  const handleFilter= ( getSectionId, getCurrentOption) =>{
-    let cpyFilters = {...filters};
+  const handleFilter = (getSectionId, getCurrentOption) => {
+    let cpyFilters = { ...filters };
     const indexOfCurrentSection = Object.keys(cpyFilters).indexOf(getSectionId);
     if (indexOfCurrentSection === -1) {
       cpyFilters = {
         ...cpyFilters,
-        [getSectionId]: [getCurrentOption]
-      }
+        [getSectionId]: [getCurrentOption],
+      };
     } else {
       const currentSection = cpyFilters[getSectionId].indexOf(getCurrentOption);
       if (currentSection === -1) {
@@ -47,17 +63,40 @@ const ShoppingListing = () => {
     }
     setFilters(cpyFilters);
     sessionStorage.setItem("filters", JSON.stringify(cpyFilters));
-  }
+  };
+
+  const handleGetProductDetails = (id) => {
+    dispatch(fetchProductDetails(id));
+  };
 
   useEffect(() => {
     setSort("priceAsc");
     setFilters(JSON.parse(sessionStorage.getItem("filters")) || {});
     dispatch(fetchAllFilteredProducts({ filters: {}, sort: "priceAsc" }));
-  }, []); 
+  }, []);
 
   useEffect(() => {
-    dispatch(fetchAllFilteredProducts());
-  }, [dispatch]);
+    if (filters && Object.keys(filters).length > 0) {
+      const createQueryString = createSearchParamsHelper(filters);
+      setSearchParams(new URLSearchParams(createQueryString));
+    } else {
+      setSearchParams({});
+    }
+  }, [filters, setSearchParams]);
+
+  useEffect(() => {
+    if (filters !== null && sort !== null)
+      dispatch(
+        fetchAllFilteredProducts({ filterParams: filters, sortParams: sort })
+      );
+  }, [dispatch, sort, filters]);
+
+  useEffect(() => {
+    if (productDetails !== null) {
+      console.log("Product Details:", productDetails);
+      setOpenDetailsDialog(true);
+    }
+  }, [productDetails]);
 
   return (
     <div className="w-full p-4 md:p-6">
@@ -96,9 +135,15 @@ const ShoppingListing = () => {
                   </button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-[200px]">
-                  <DropdownMenuRadioGroup value={sort} onValueChange={handleSort}>
+                  <DropdownMenuRadioGroup
+                    value={sort}
+                    onValueChange={handleSort}
+                  >
                     {sortOptions.map((sortItem) => (
-                      <DropdownMenuRadioItem key={sortItem.id} value={sortItem.id}>
+                      <DropdownMenuRadioItem
+                        key={sortItem.id}
+                        value={sortItem.id}
+                      >
                         {sortItem.label}
                       </DropdownMenuRadioItem>
                     ))}
@@ -119,6 +164,7 @@ const ShoppingListing = () => {
                 <ShoppingProductTile
                   key={productItem._id}
                   product={productItem}
+                  handleGetProductDetails={handleGetProductDetails}
                 />
               ))
             ) : (
@@ -128,6 +174,11 @@ const ShoppingListing = () => {
             )}
           </div>
         </div>
+        <ProductDetailsDialog
+          open={openDetailsDialog}
+          setOpen={setOpenDetailsDialog}
+          productDetails={productDetails}
+        />
       </div>
     </div>
   );

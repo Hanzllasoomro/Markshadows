@@ -4,20 +4,22 @@ import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
 import { brandOptionsMap, categoryOptionsMap } from "@/config";
 
-const ShoppingProductTile = ({ product }) => {
+const ShoppingProductTile = ({ product, handleGetProductDetails }) => {
   return (
     <Card className="flex flex-col h-full overflow-hidden">
-      <div className="relative w-full h-48">
-        <img
-          src={product.image}
-          alt={product.title}
-          className="w-full h-full object-cover rounded-t-lg"
-        />
-        {product.salePrice > 0 && (
-          <Badge className="absolute top-2 left-2 bg-red-500 hover:bg-red-600 text-xs">
-            Sale
-          </Badge>
-        )}
+      <div onClick={() => handleGetProductDetails(product._id)} className="cursor-pointer">
+        <div className="relative w-full h-48">
+          <img
+            src={product.image}
+            alt={product.title}
+            className="w-full h-full object-cover rounded-t-lg"
+          />
+          {product.salePrice > 0 && (
+            <Badge className="absolute top-2 left-2 bg-red-500 hover:bg-red-600 text-xs">
+              Sale
+            </Badge>
+          )}
+        </div>
       </div>
 
       <CardContent className="flex flex-col flex-grow p-4">
@@ -26,8 +28,12 @@ const ShoppingProductTile = ({ product }) => {
         </h3>
 
         <div className="flex flex-wrap items-center justify-between mb-2 text-sm text-muted-foreground gap-x-2">
-          <span className="text-sm text-muted-foreground">{categoryOptionsMap[product.category]}</span>
-          <span className="text-sm text-muted-foreground">{brandOptionsMap[product.brand]}</span>
+          <span className="text-sm text-muted-foreground">
+            {categoryOptionsMap[product.category]}
+          </span>
+          <span className="text-sm text-muted-foreground">
+            {brandOptionsMap[product.brand]}
+          </span>
         </div>
 
         <div className="flex items-center justify-between mb-4">
