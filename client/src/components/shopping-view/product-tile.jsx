@@ -2,12 +2,15 @@ import React from "react";
 import { Card, CardContent, CardFooter } from "../ui/card";
 import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
-import { brandOptionsMap, categoryOptionsMap } from "@/config";
+import { brandOptionsMap, categoryOptionsMap } from "../../config/index";
 
-const ShoppingProductTile = ({ product, handleGetProductDetails }) => {
+const ShoppingProductTile = ({ product, handleGetProductDetails, handleAddtoCart }) => {
   return (
     <Card className="flex flex-col h-full overflow-hidden">
-      <div onClick={() => handleGetProductDetails(product._id)} className="cursor-pointer">
+      <div
+        onClick={() => handleGetProductDetails(product._id)}
+        className="cursor-pointer"
+      >
         <div className="relative w-full h-48">
           <img
             src={product.image}
@@ -53,7 +56,9 @@ const ShoppingProductTile = ({ product, handleGetProductDetails }) => {
       </CardContent>
 
       <CardFooter className="mt-auto p-4 pt-0">
-        <Button className="w-full text-sm">Add to Cart</Button>
+        <Button className="w-full text-sm" onClick={() => handleAddtoCart(product._id)}>
+          Add to Cart
+        </Button>
       </CardFooter>
     </Card>
   );

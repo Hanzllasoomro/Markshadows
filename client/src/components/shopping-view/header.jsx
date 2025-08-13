@@ -1,9 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { logoutUser } from "../../store/auth-slice/index";
 import { Link, useNavigate } from "react-router-dom";
 import { House, Menu, ShoppingCart, LogOut, UserCog } from "lucide-react";
-import { Sheet, SheetContent, SheetTrigger } from "../ui/sheet";
+import { Sheet, SheetClose, SheetContent, SheetTrigger } from "../ui/sheet";
 import { Button } from "../ui/button";
 import { shoppingViewHeaderMenuItems } from "../../config";
 import {
@@ -15,6 +15,7 @@ import {
   DropdownMenuSeparator,
 } from "../ui/dropdown-menu";
 import { Avatar, AvatarFallback } from "../ui/avatar";
+import UserCartWrapper from "./cart-wrapper";
 
 function MenuItems() {
   return (
@@ -34,24 +35,32 @@ function MenuItems() {
 
 function HeaderRightContent() {
   const { user } = useSelector((state) => state.auth);
+  const [openCartSheet, setOpenCartSheet] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const handleLogout = async () => {
     await dispatch(logoutUser());
     navigate("/auth/login");
-  }
+  };
 
   return (
     <div className="flex items-center gap-4">
-      <Button variant="outline" size="icon" className="relative group">
-        <ShoppingCart className="h-6 w-6" />
-        <span className="sr-only">User Cart</span>
-        <div className="absolute -top-1 -right-1 bg-red-500 text-white text-xs w-4 h-4 flex items-center justify-center rounded-full group-hover:scale-110 transition-transform duration-150">
-          3
-        </div>
-      </Button>
-
+      <Sheet open={openCartSheet} onOpenChange={() => setOpenCartSheet(false)}>
+        <Button
+          variant="outline"
+          size="icon"
+          className="relative group"
+          onClick={() => setOpenCartSheet(true)}
+        >
+          <ShoppingCart className="h-6 w-6" />
+          <span className="sr-only">User Cart</span>
+          <div className="absolute -top-1 -right-1 bg-red-500 text-white text-xs w-4 h-4 flex items-center justify-center rounded-full group-hover:scale-110 transition-transform duration-150">
+            3
+          </div>
+        </Button>
+        <UserCartWrapper />
+      </Sheet>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Avatar className="bg-black">
