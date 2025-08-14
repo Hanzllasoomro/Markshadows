@@ -17,6 +17,7 @@ import { createSearchParams, useSearchParams } from "react-router-dom";
 import ProductDetailsDialog from "../../components/shopping-view/product-details";
 import { fetchProductDetails } from "../../store/shop/products-slice/index";
 import { addToCart, fetchCartItems } from "@/store/shop/cart-slice";
+import { toast } from "sonner";
 
 const createSearchParamsHelper = (filterParams) => {
   const queryParams = [];
@@ -36,8 +37,7 @@ const ShoppingListing = () => {
     (state) => state.shoppingProducts
   );
 
-  const {user} = useSelector(state => state.auth);
-  const { cartItems } = useSelector(state => state.shopCart);
+  const { user } = useSelector((state) => state.auth);
   const [showMobileFilters, setShowMobileFilters] = useState(false);
   const [filters, setFilters] = useState({});
   const [sort, setSort] = useState(null);
@@ -72,14 +72,17 @@ const ShoppingListing = () => {
     dispatch(fetchProductDetails(id));
   };
 
-  const handleAddtoCart = (getCurrentProductId) =>{
-    dispatch(addToCart({
-      userId : user._id,
-      productId: getCurrentProductId,
-      quantity: 1
-    })).then((data) => {
-      if(data.payload.success){
-        dispatch(fetchCartItems( {userId : user._id} ));
+  const handleAddtoCart = (getCurrentProductId) => {
+    dispatch(
+      addToCart({
+        userId: user._id,
+        productId: getCurrentProductId,
+        quantity: 1,
+      })
+    ).then((data) => {
+      if (data.payload.success) {
+        dispatch(fetchCartItems({ userId: user._id }));
+        toast("product added to cart");
       }
     });
   };

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { logoutUser } from "../../store/auth-slice/index";
 import { Link, useNavigate } from "react-router-dom";
@@ -16,6 +16,7 @@ import {
 } from "../ui/dropdown-menu";
 import { Avatar, AvatarFallback } from "../ui/avatar";
 import UserCartWrapper from "./cart-wrapper";
+import { fetchCartItems } from "@/store/shop/cart-slice";
 
 function MenuItems() {
   return (
@@ -35,6 +36,7 @@ function MenuItems() {
 
 function HeaderRightContent() {
   const { user } = useSelector((state) => state.auth);
+  const { cartItems } = useSelector((state) => state.shopCart);
   const [openCartSheet, setOpenCartSheet] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -43,6 +45,10 @@ function HeaderRightContent() {
     await dispatch(logoutUser());
     navigate("/auth/login");
   };
+
+  useEffect(() => {
+    dispatch(fetchCartItems({ userId: user._id }));
+  }, [dispatch, user]);
 
   return (
     <div className="flex items-center gap-4">
@@ -56,10 +62,16 @@ function HeaderRightContent() {
           <ShoppingCart className="h-6 w-6" />
           <span className="sr-only">User Cart</span>
           <div className="absolute -top-1 -right-1 bg-red-500 text-white text-xs w-4 h-4 flex items-center justify-center rounded-full group-hover:scale-110 transition-transform duration-150">
-            3
+            {cartItems?.items?.length || 0}
           </div>
         </Button>
-        <UserCartWrapper />
+        <UserCartWrapper
+          cartItems={
+            cartItems && cartItems.items && cartItems.items.length > 0
+              ? cartItems.items
+              : []
+          }
+        />
       </Sheet>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>

@@ -3,7 +3,6 @@ const Product = require('../../models/Product');
 
 const addToCart = async (req, res) => {
     try {
-
         const { userId, productId, quantity } = req.body;
         if (!userId || !productId || quantity <= 0) {
             return res.status(400).json({
@@ -53,7 +52,8 @@ const deleteCartItem = async (req, res) => {
         if (!userId || !productId) {
             return res.status(400).json({
                 success: false,
-                message: "Invalid data provided!"
+                message: "Invalid data provided!",
+                data : null,
             });
         }
 
@@ -63,7 +63,8 @@ const deleteCartItem = async (req, res) => {
         });
         if (!cart) return res.status(404).json({
             success: false,
-            message: "Cart not Found"
+            message: "Cart not Found",
+            data : null,
         });
 
         cart.items = cart.items.filter((item) => item.productId._id.toString() !== productId);
@@ -74,19 +75,21 @@ const deleteCartItem = async (req, res) => {
             select: 'image title price salePrice'
         });
         const populateCartItems = cart.items.map((item) => ({
-            productId: item.productId ? item.productId._id : null,
-            image: item.productId ? item.productId.image : null,
-            title: item.productId ? item.productId.title : 'product not found',
-            price: item.productId ? item.productId.price : null,
-            salePrice: item.productId ? item.productId.salePrice : null,
+            productId: item.productId?._id ?? null,
+            image: item.productId?.image ?? null,
+            title: item.productId?.title ?? 'product not found',
+            price: item.productId?.price ?? null,
+            salePrice: item.productId?.salePrice ?? null,
             quantity: item.quantity
         }));
 
         res.status(200).json({
             success: true,
+            message : 'Item removed from cart',
             data: {
-                ...cart._doc,
-                items: populateCartItems,
+                _id: cart._id,
+                userId: cart.userId,
+                items: populateCartItems
             },
         });
 
@@ -94,7 +97,8 @@ const deleteCartItem = async (req, res) => {
         console.log(error);
         res.status(500).json({
             success: false,
-            message: 'An error occurred while removing from cart.'
+            message: 'An error occurred while removing from cart.',
+            data : null,
         });
     }
 };
@@ -167,6 +171,7 @@ const updateCartItemsQty = async (req, res) => {
             return res.status(404).json({
                 success: false,
                 message: "Cart Not Found!!!"
+                 
             });
         }
 
