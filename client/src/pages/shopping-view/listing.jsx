@@ -111,7 +111,6 @@ const ShoppingListing = () => {
 
   useEffect(() => {
     if (productDetails !== null) {
-      console.log("Product Details:", productDetails);
       setOpenDetailsDialog(true);
     }
   }, [productDetails]);
