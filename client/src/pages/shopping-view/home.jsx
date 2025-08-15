@@ -17,6 +17,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchAllFilteredProducts } from "@/store/shop/products-slice";
 import ShoppingProductTile from "@/components/shopping-view/product-tile";
 import { useNavigate } from "react-router-dom";
+import { fetchProductDetails } from "@/store/shop/products-slice";
+import { fetchCartItems, addToCart } from "@/store/shop/cart-slice";
+import { toast } from "sonner";
+import ProductDetailsDialog from "@/components/shopping-view/product-details";
 
 const ShoppingHome = () => {
   const slides = [bannerOne, bannerTwo, bannerThird];
@@ -37,19 +41,39 @@ const ShoppingHome = () => {
     { id: "newBalance", label: "New Balance", icon: ShirtIcon },
   ];
 
+  const {user} = useSelector(state => state.auth);
+  const { productList, productDetails } = useSelector((state) => state.shoppingProducts);
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [openDetailsDialog, setOpenDetailsDialog] = useState(false);
   const dispatch = useDispatch();
-  const { productList } = useSelector((state) => state.shoppingProducts);
   const navigate = useNavigate();
 
   const handleNavigateToListingPage = (getCurrentItem, section) => {
-    sessionStorage.removeItem('filters');
+    sessionStorage.removeItem("filters");
     const currentFilter = {
       [section]: [getCurrentItem.id],
     };
-    console.log("current Filters", currentFilter);
-    sessionStorage.setItem('filters', JSON.stringify(currentFilter));
+    sessionStorage.setItem("filters", JSON.stringify(currentFilter));
     navigate("/shop/listing");
+  };
+
+  const handleGetProductDetails = (id) => {
+    dispatch(fetchProductDetails(id));
+  };
+
+  const handleAddtoCart = (getCurrentProductId) => {
+    dispatch(
+      addToCart({
+        userId: user._id,
+        productId: getCurrentProductId,
+        quantity: 1,
+      })
+    ).then((data) => {
+      if (data.payload.success) {
+        dispatch(fetchCartItems({ userId: user._id }));
+        toast("product added to cart");
+      }
+    });
   };
 
   useEffect(() => {
@@ -64,6 +88,10 @@ const ShoppingHome = () => {
       fetchAllFilteredProducts({ filterParams: {}, sortParams: "priceAsc" })
     );
   }, [dispatch]);
+
+  useEffect(() => {
+    if(productDetails !== null ) setOpenDetailsDialog(true);
+  },[productDetails]);
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -127,7 +155,10 @@ const ShoppingHome = () => {
           <h2 className="text-3xl font-bold text-center mb-8">Shop By Brand</h2>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
             {brandWtihIcon.map((brandItem) => (
-              <Card onClick={() => handleNavigateToListingPage(brandItem, "brand")} className="cursor-pointer hover:shadow-lg transition-shadow">
+              <Card
+                onClick={() => handleNavigateToListingPage(brandItem, "brand")}
+                className="cursor-pointer hover:shadow-lg transition-shadow"
+              >
                 <CardContent className="flex flex-col items-center justify-center p-6">
                   <brandItem.icon className="w-12 h-12 mb-4 text-primary" />
                   <span className="font-bold">{brandItem.label}</span>
@@ -145,12 +176,21 @@ const ShoppingHome = () => {
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {productList && productList.length > 0
               ? productList.map((productItem) => (
-                  <ShoppingProductTile product={productItem} />
+                  <ShoppingProductTile
+                    product={productItem}
+                    handleGetProductDetails={handleGetProductDetails}
+                    handleAddtoCart={handleAddtoCart}
+                  />
                 ))
               : null}
           </div>
         </div>
       </section>
+      <ProductDetailsDialog 
+      open={openDetailsDialog}
+      setOpen={setOpenDetailsDialog}
+      productDetails={productDetails}
+      />
     </div>
   );
 };
