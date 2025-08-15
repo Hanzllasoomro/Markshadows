@@ -194,7 +194,7 @@ export const filterOptions = {
     { id: 'men', label: 'Men' },
     { id: 'women', label: 'Women' },
     { id: 'kids', label: 'kids' },
-    { id: 'accesories', label: 'Accesories' },
+    { id: 'accessories', label: 'Accessories' },
     { id: 'footwear', label: 'Footwear' }
   ],
   brand: [

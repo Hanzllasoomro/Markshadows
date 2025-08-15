@@ -88,10 +88,12 @@ const ShoppingListing = () => {
   };
 
   useEffect(() => {
-    setSort("priceAsc");
-    setFilters(JSON.parse(sessionStorage.getItem("filters")) || {});
-    dispatch(fetchAllFilteredProducts({ filters: {}, sort: "priceAsc" }));
-  }, []);
+  setSort("priceAsc");
+  const savedFilters = JSON.parse(sessionStorage.getItem("filters")) || {};
+  setFilters(savedFilters);
+  dispatch(fetchAllFilteredProducts({ filterParams: savedFilters, sortParams: "priceAsc" }));
+}, []);
+
 
   useEffect(() => {
     if (filters && Object.keys(filters).length > 0) {

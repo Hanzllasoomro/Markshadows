@@ -17,18 +17,33 @@ import {
 import { Avatar, AvatarFallback } from "../ui/avatar";
 import UserCartWrapper from "./cart-wrapper";
 import { fetchCartItems } from "@/store/shop/cart-slice";
+import { Label } from "../ui/label";
 
 function MenuItems() {
+
+  const navigate = useNavigate();
+  function handleNavigate(getCurrentMenuItem) {
+    sessionStorage.removeItem("filters");
+    const currentFilter =
+      getCurrentMenuItem.id !== "home"
+        ? {
+            category: [getCurrentMenuItem.id],
+          }
+        : null;
+    sessionStorage.setItem("filters", JSON.stringify(currentFilter));
+    navigate(getCurrentMenuItem.path);
+  };
+
   return (
-    <nav className="flex flex-col gap-4 mb-3 lg:mb-0 lg:flex-row lg:items-center lg:gap-6 text-lg font-medium">
-      {shoppingViewHeaderMenuItems.map((item) => (
-        <Link
-          key={item.id}
-          to={item.path}
-          className="transition-colors duration-200 text-muted-foreground hover:text-primary"
+    <nav className="flex flex-col gap-4 mb-3 lg:mb-0 lg:flex-row lg:items-center lg:gap-6 text-lg font-medium items-center">
+      {shoppingViewHeaderMenuItems.map((menuItem) => (
+        <Label
+          key={menuItem.id}
+          onClick={() => handleNavigate(menuItem)}
+          className="transition-colors duration-200 text-muted-foreground hover:text-primary cursor-pointer"
         >
-          {item.label}
-        </Link>
+          {menuItem.label}
+        </Label>
       ))}
     </nav>
   );
@@ -51,7 +66,7 @@ function HeaderRightContent() {
   }, [dispatch, user]);
 
   return (
-    <div className="flex items-center gap-4">
+    <div className="flex items-center gap-5 px-35">
       <Sheet open={openCartSheet} onOpenChange={() => setOpenCartSheet(false)}>
         <Button
           variant="outline"
@@ -120,8 +135,10 @@ const ShoppingHeader = () => {
             </Button>
           </SheetTrigger>
           <SheetContent className="w-full max-w-xs" side="left">
-            <div className="py-6 px-4">
-              <h2 className="text-lg font-semibold mb-4 text-primary">Menu</h2>
+            <div className="text-center py-15">
+              <h2 className="text-lg font-semibold mb-4 text-primary border-1">
+                Menu
+              </h2>
               <MenuItems />
             </div>
             <HeaderRightContent />
