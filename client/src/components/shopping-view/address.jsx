@@ -28,7 +28,7 @@ const Address = () => {
 
   function handleManageAddress(event) {
 
-    if(addressList.length >= 3){
+    if(addressList.length >= 3 && currentEditedId === null){
         toast.success(" You can add max 3 addresses", {
               style: {
                 background: "red",

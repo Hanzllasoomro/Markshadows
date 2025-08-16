@@ -1,9 +1,42 @@
-import React from 'react'
+import React from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../ui/table";
+import { Button } from "../ui/button";
 
-const Orders = () => {
+const ShoppingOrders = () => {
   return (
-    <div>Orders</div>
-  )
-}
+    <Card>
+      <CardHeader>
+        <CardTitle>Order History</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Order ID</TableHead>
+              <TableHead>Order Date</TableHead>
+              <TableHead>Order Status</TableHead>
+              <TableHead>Order Price</TableHead>
+              <TableHead>
+                <span className="sr-only">Details</span>
+              </TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            <TableRow>
+              <TableCell>132456</TableCell>
+              <TableCell>17/8/2025</TableCell>
+              <TableCell>In Process</TableCell>
+              <TableCell>Rs 10000</TableCell>
+              <TableCell>
+                <Button>View Details</Button>
+              </TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>
+      </CardContent>
+    </Card>
+  );
+};
 
-export default Orders;
+export default ShoppingOrders;
