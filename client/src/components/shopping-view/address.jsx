@@ -5,9 +5,11 @@ import { addressFormControls } from "@/config";
 import { useDispatch, useSelector } from "react-redux";
 import {
   addNewAddress,
+  deleteAddress,
   fetchAllAddress,
 } from "../../store/shop/address-slice/index";
 import AddressCard from "./address-card";
+import { data } from "react-router-dom";
 const initialAddressFormData = {
   address: "",
   city: "",
@@ -22,11 +24,6 @@ const Address = () => {
   const { user } = useSelector((state) => state.auth);
   const { addressList } = useSelector((state) => state.shopAddress);
   function handleManageAddress(event) {
-    console.log("Submitting address:", {
-      ...formData,
-      userId: user._id,
-    });
-
     dispatch(
       addNewAddress({
         ...formData,
@@ -46,6 +43,18 @@ const Address = () => {
     );
   };
 
+  const handleDeleteAddress = (getCurrentAddress) =>{
+    dispatch(deleteAddress({
+        userId : user._id,
+        addressId : getCurrentAddress._id
+    })).then(data =>{
+        if(data?.payload?.success){
+            dispatch(fetchAllAddress(user._id));
+        }
+    })
+  }
+
+
   useEffect(() => {
     dispatch(fetchAllAddress(user.id));
   }, [dispatch]);
@@ -57,6 +66,7 @@ const Address = () => {
               <AddressCard
                 key={singleAddressItem._id}
                 addressInfo={singleAddressItem}
+                handleDeleteAddress={handleDeleteAddress}
               />
             ))
           : null}
