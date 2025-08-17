@@ -27,7 +27,6 @@ mongoose.connect(process.env.MONGO_URI, {})
     });
 
 app.use(helmet());
-
 app.use(cors({
     origin: process.env.CLIENT_ORIGIN || 'http://localhost:5173', // Use env for origin
     methods: ['GET', 'POST', 'PUT', 'DELETE'],

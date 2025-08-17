@@ -4,6 +4,7 @@ import Address from "@/components/shopping-view/address";
 import { useSelector } from "react-redux";
 import UserCartItemsContent from "@/components/shopping-view/cart-items-content";
 import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
 
 const ShoppingCheckout = () => {
   const { cartItems } = useSelector((state) => state.shopCart);
@@ -19,6 +20,15 @@ const ShoppingCheckout = () => {
           0
         )
       : 0;
+
+  const makePayment = async () => {
+    toast.success("Payment Done Successfully", {
+                  style: {
+                    background: "green",
+                    color: "white",
+                  },
+                });
+  };
   return (
     <div className="flex flex-col">
       <div className="relative h-[300px] w-full overflow-hidden">
@@ -43,9 +53,11 @@ const ShoppingCheckout = () => {
               <span className="font-bold">Rs {totalCartAmount}</span>
             </div>
           </div>
-        </div>
-        <div className="mt-4 w-full ">
-          <Button className="w-full">CheckOut</Button>
+          <div className="mt-4 w-full ">
+            <Button onClick={makePayment} className="w-full">
+              Payment
+            </Button>
+          </div>
         </div>
       </div>
     </div>
