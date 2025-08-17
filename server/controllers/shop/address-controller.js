@@ -7,7 +7,7 @@ const addAddress = async (req, res) => {
             userId, address, city, pincode, phone, notes
         } = req.body;
 
-        if (!userId || !address || !city || !pincode || !phone || !notes) {
+        if (!userId || !address || !city || !pincode || !phone) {
             return res.status(400).json({
                 success: false,
                 message: 'Invalid data Provided'
@@ -44,7 +44,7 @@ const fetchAddress = async (req, res) => {
             });
         }
 
-        const addressList = await Address.findOne({ userId });
+        const addressList = await Address.find({ userId });
 
         res.status(200).json({
             success: true,
@@ -104,7 +104,7 @@ const deleteAddress = async (req, res) => {
                 message: 'UserId & addressId is required'
             });
         }
-        const address = await Address.findOneAndUpdate({
+        const address = await Address.findOneAndDelete({
             _id: addressId, userId
         });
 
