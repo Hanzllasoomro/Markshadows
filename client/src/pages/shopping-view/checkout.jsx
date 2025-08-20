@@ -22,12 +22,25 @@ const ShoppingCheckout = () => {
       : 0;
 
   const makePayment = async () => {
-    toast.success("Payment Done Successfully", {
-                  style: {
-                    background: "green",
-                    color: "white",
-                  },
-                });
+    if (cartItems.items.length === 0) {
+      toast.error("Your cart is empty. Please add items before proceeding!", {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        theme: "colored",
+      });
+    } else {
+      toast.success("Payment Done Successfully", {
+        style: {
+          background: "green",
+          color: "white",
+        },
+      });
+      console.log("Gareeb ");
+    }
   };
   return (
     <div className="flex flex-col">

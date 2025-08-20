@@ -117,3 +117,5 @@ app-structure
 ├── README.md
 
 // Deployment will use Vercel (client) and Render/Railway (server) with MongoDB Atlas
+
+video : 10.33 - 11.43
